@@ -3,7 +3,7 @@ using Azure.Identity;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Graph;
 
-namespace O365Api.Graph
+namespace MicrosoftGraphExamples.Graph
 {
     public class GraphHelper
     {

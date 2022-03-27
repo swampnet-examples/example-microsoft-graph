@@ -1,9 +1,9 @@
 ﻿using Microsoft.Extensions.Configuration;
-using O365Api.Graph;
+using MicrosoftGraphExamples.Graph;
 using System;
 using System.Threading.Tasks;
 
-namespace O365Api
+namespace MicrosoftGraphExamples
 {
     internal class Program
     {
