@@ -9,8 +9,7 @@ namespace MicrosoftGraphExamples
     {
         static async Task Main(string[] args)
         {
-            var cfg = LoadAppSettings();
-            var client = GraphHelper.GetGraphServiceClient(cfg);
+            var client = GraphServiceClientFactory.Create();
             
             var users = await client.Users.Request()
                 //.Select(u => new
@@ -27,18 +26,15 @@ namespace MicrosoftGraphExamples
             {
                 Console.WriteLine($"[{user.Id}] {user.DisplayName}");
 
-                //var u = await client.Users[user.Id].Request().GetAsync();
+                // Get email messages
+                //var messages = await client.Users[user.Id].Messages.Request().GetAsync();
 
-                //Console.WriteLine($"[{u.Id}]");
+                // Url for email messages
+                // Mail.Read
+                // Mail.ReadWrite for moving messages about
+                Console.WriteLine($" - messages: {client.Users[user.Id].Messages.RequestUrl}");
+                Console.WriteLine($" - message attachments: {client.Users[user.Id].Messages["ABC123"].Attachments.RequestUrl}");
             }
-        }
-
-
-        static IConfigurationRoot LoadAppSettings()
-        {
-            return new ConfigurationBuilder()
-                .AddUserSecrets<Program>()
-                .Build();
         }
     }
 }

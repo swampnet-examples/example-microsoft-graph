@@ -5,9 +5,11 @@ using Microsoft.Graph;
 
 namespace MicrosoftGraphExamples.Graph
 {
-    public class GraphHelper
+    public class GraphServiceClientFactory
     {
-        public static GraphServiceClient GetGraphServiceClient(IConfiguration cfg)
+        private static IConfigurationRoot _cfg = null;
+
+        public static GraphServiceClient Create()
         {
             // The client credentials flow requires that you request the
             // /.default scope, and preconfigure your permissions on the
@@ -17,12 +19,15 @@ namespace MicrosoftGraphExamples.Graph
 
             // https://docs.microsoft.com/dotnet/api/azure.identity.clientsecretcredential
             return new GraphServiceClient(
-                GetTokenCredential(cfg), 
+                GetTokenCredential(), 
                 scopes);
         }
 
-        private static TokenCredential GetTokenCredential(IConfiguration cfg)
+
+        private static TokenCredential GetTokenCredential()
         {
+            _cfg ??= LoadAppSettings();
+
             // using Azure.Identity;
             var options = new TokenCredentialOptions
             {
@@ -32,10 +37,18 @@ namespace MicrosoftGraphExamples.Graph
             //var x = new DefaultAzureCredential()
 
             return new ClientSecretCredential(
-                cfg["tenant"],
-                cfg["clientId"],
-                cfg["clientSecret"],
+                _cfg["tenantId"],
+                _cfg["clientId"],
+                _cfg["clientSecret"],
                 options);
+        }
+
+
+        private static IConfigurationRoot LoadAppSettings()
+        {
+            return new ConfigurationBuilder()
+                .AddUserSecrets<Program>()
+                .Build();
         }
     }
 }
